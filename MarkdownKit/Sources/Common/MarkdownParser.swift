@@ -156,9 +156,19 @@ open class MarkdownParser {
         elements.forEach { element in
             element.parse(attributedString)
         }
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 8
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+
+        attributedString.enumerateAttributes(in: NSRange(location: 0, length: attributedString.length), options: []) { attributes, range, _ in
+            if let paragraphStyle = attributes[.paragraphStyle] as? NSMutableParagraphStyle {
+                let updatedParagraphStyle = paragraphStyle.mutableCopy() as! NSMutableParagraphStyle
+                updatedParagraphStyle.lineSpacing = 8
+                attributedString.addAttribute(.paragraphStyle, value: updatedParagraphStyle, range: range)
+            } else {
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 8
+                attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: range)
+            }
+        }
+
         return attributedString
     }
 
