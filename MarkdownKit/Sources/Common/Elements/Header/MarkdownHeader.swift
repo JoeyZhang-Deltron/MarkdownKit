@@ -45,7 +45,8 @@ open class MarkdownHeader: MarkdownLevelElement {
     }
 
     private func fontSize(forLevel level: Int) -> CGFloat {
-        switch level {
+        print("[Markdown] => fontSize for level: \(level)")
+        return switch level {
         case 1: 20
         case 2: 16
         case 3: 16
