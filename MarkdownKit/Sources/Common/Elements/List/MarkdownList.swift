@@ -43,17 +43,9 @@ open class MarkdownList: MarkdownLevelElement {
 
     private func defaultParagraphStyle() -> NSMutableParagraphStyle {
         let paragraphStyle = NSMutableParagraphStyle()
-
-        // 计算指示符的宽度
-        let indicatorWidth = indicator.size(withAttributes: [.font: font ?? UIFont.systemFont(ofSize: 16)]).width
-
-        // 设置首行缩进
-        paragraphStyle.firstLineHeadIndent = indicatorWidth
-
-        // 设置后续行缩进
-        paragraphStyle.headIndent = indicatorWidth
-
-        paragraphStyle.paragraphSpacing = 4
+        paragraphStyle.firstLineHeadIndent = 0
+        paragraphStyle.headIndent = 16
+        paragraphStyle.paragraphSpacing = 8
         return paragraphStyle
     }
 }
