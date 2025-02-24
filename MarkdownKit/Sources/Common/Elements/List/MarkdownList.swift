@@ -44,7 +44,7 @@ open class MarkdownList: MarkdownLevelElement {
     private func defaultParagraphStyle() -> NSMutableParagraphStyle {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.firstLineHeadIndent = 0
-        paragraphStyle.headIndent = 14
+        paragraphStyle.headIndent = 12
         paragraphStyle.paragraphSpacing = 8
         return paragraphStyle
     }
