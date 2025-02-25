@@ -8,6 +8,9 @@
 import Foundation
 
 open class MarkdownList: MarkdownLevelElement {
+    public static let checkboxClickableAttributeName = NSAttributedString.Key("MarkdownKit.MarkdownListCheckboxClickable")
+    public static let checkboxStateAttributeName = NSAttributedString.Key("MarkdownKit.MarkdownListCheckboxState")
+
     fileprivate static let regex = "^( {0,%@}[\\*\\+\\-])\\s+(.+)$"
 
     open var maxLevel: Int
@@ -67,7 +70,7 @@ open class MarkdownList: MarkdownLevelElement {
                 // 创建图片附件
                 let attachment = NSTextAttachment()
                 #if os(iOS)
-                attachment.image = UIImage(systemName: checkboxImageName)
+                    attachment.image = UIImage(systemName: checkboxImageName)
                 #elseif os(macOS)
                     attachment.image = NSImage(named: checkboxImageName)
                 #endif
@@ -87,6 +90,11 @@ open class MarkdownList: MarkdownLevelElement {
                 // 更新属性
                 let updatedRange = NSRange(location: range.location, length: checkboxAttributedString.length)
                 attributedString.addAttributes([.paragraphStyle: defaultParagraphStyle()], range: updatedRange)
+
+                // 添加可以追踪的标记
+                let checkboxRange = NSRange(location: range.location + offset.count, length: 1) // 只标记图标部分
+                attributedString.addAttribute(MarkdownList.checkboxClickableAttributeName, value: true, range: checkboxRange)
+                attributedString.addAttribute(MarkdownList.checkboxStateAttributeName, value: isChecked, range: checkboxRange)
 
                 // 移除复选框标记部分
                 let checkboxMarkRange = NSRange(location: range.location + checkboxAttributedString.length, length: checkboxMarkLength)
