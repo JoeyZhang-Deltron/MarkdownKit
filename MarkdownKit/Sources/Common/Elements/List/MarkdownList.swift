@@ -58,7 +58,7 @@ open class MarkdownList: MarkdownLevelElement {
 
             if isCheckbox {
                 // 处理复选框：获取缩进偏移量
-                let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
+                let levelIndicatorOffsetList = [1: "", 2: "", 3: " ", 4: " ", 5: "   ", 6: "   "]
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
