@@ -35,22 +35,26 @@ open class MarkdownList: MarkdownLevelElement {
         let rangeEnd = range.location + range.length
 
         // 确保有足够的字符来检查复选框格式
-        if rangeEnd + 5 <= originalString.count {
+        if rangeEnd + 4 <= originalString.count {
             let startIndex = originalString.index(originalString.startIndex, offsetBy: rangeEnd)
-            let checkboxLength = 5 // " [ ]" 或 " [x]" 的长度
+            let checkboxLength = 4 // "[ ]" 或 "[x]" 的长度（注意：没有前导空格）
             let endIndex = originalString.index(startIndex, offsetBy: min(checkboxLength, originalString.count - rangeEnd))
             let possibleCheckbox = String(originalString[startIndex ..< endIndex])
-            print("[MarkdownKit] => 当前的可能的字符串：|\(possibleCheckbox)|")
+            print("[MarkdownKit] => 修正后检查的字符串：|\(possibleCheckbox)|")
+
             var isCheckbox = false
             var isChecked = false
+            var checkboxMarkLength = 0
 
-            // 检查正确的复选框格式（注意空格）
-            if possibleCheckbox.hasPrefix(" [ ]") {
+            // 检查复选框格式（注意没有前导空格）
+            if possibleCheckbox.hasPrefix("[ ]") {
                 isCheckbox = true
                 isChecked = false
-            } else if possibleCheckbox.hasPrefix(" [x]") || possibleCheckbox.hasPrefix(" [X]") {
+                checkboxMarkLength = 3 // "[ ]" 长度为3
+            } else if possibleCheckbox.hasPrefix("[x]") || possibleCheckbox.hasPrefix("[X]") {
                 isCheckbox = true
                 isChecked = true
+                checkboxMarkLength = 3 // "[x]" 长度为3
             }
 
             if isCheckbox {
@@ -70,12 +74,13 @@ open class MarkdownList: MarkdownLevelElement {
                 attributedString.addAttributes([.paragraphStyle: defaultParagraphStyle()], range: updatedRange)
 
                 // 移除复选框标记部分
-                let checkboxMarkRange = NSRange(location: range.location + checkboxString.utf16.count, length: 4)
+                let checkboxMarkRange = NSRange(location: range.location + checkboxString.utf16.count, length: checkboxMarkLength)
                 attributedString.replaceCharacters(in: checkboxMarkRange, with: "")
 
                 return
             }
         }
+        
         let levelIndicatorList = [1: "\(indicator)  ", 2: "\(indicator)  ", 3: "◦  ", 4: "◦  ", 5: "▪︎  ", 6: "▪︎  "]
         let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
         guard let indicatorIcon = levelIndicatorList[level],
