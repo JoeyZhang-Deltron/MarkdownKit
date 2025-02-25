@@ -63,7 +63,7 @@ open class MarkdownList: MarkdownLevelElement {
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
-                let checkboxImageName = isChecked ? "square-check.png" : "square.png"
+                let checkboxImageName = isChecked ? "square-check" : "square"
                 let checkboxSize: CGSize = CGSize(width: 12, height: 12)
 
                 // 创建图片附件
