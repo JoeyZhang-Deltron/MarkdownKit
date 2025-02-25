@@ -18,7 +18,7 @@ all the Markdown elements.
 
   s.source_files          = "MarkdownKit/Sources/Common/**/*"
 
-  s.ios.deployment_target = "9.0"
+  s.ios.deployment_target = "13.0"
   s.ios.source_files      = "MarkdownKit/Sources/UIKit/**/*"
   s.ios.frameworks        = "UIKit"
 
