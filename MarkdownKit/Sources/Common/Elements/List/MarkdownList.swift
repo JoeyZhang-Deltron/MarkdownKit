@@ -63,7 +63,7 @@ open class MarkdownList: MarkdownLevelElement {
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
-                let checkboxImageName = isChecked ? "square-check" : "square"
+                let checkboxImageName = isChecked ? "square-check.png" : "square.png"
                 let checkboxSize: CGSize = CGSize(width: 12, height: 12)
 
                 // 创建图片附件
@@ -114,10 +114,5 @@ open class MarkdownList: MarkdownLevelElement {
         paragraphStyle.headIndent = 12
         paragraphStyle.paragraphSpacing = 8
         return paragraphStyle
-    }
-
-    private func handleCheckbox(_ attributedString: NSMutableAttributedString, range: NSRange, content: String, checked: Bool, level: Int) {
-        let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
-        guard let offset = levelIndicatorOffsetList[level] else { return }
     }
 }
