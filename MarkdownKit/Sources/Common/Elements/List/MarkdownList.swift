@@ -63,24 +63,41 @@ open class MarkdownList: MarkdownLevelElement {
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
-                let checkboxImage = isChecked ? "✅" : "☐"
-                let checkboxString = "\(offset)\(checkboxImage)  "
+                let checkboxImageName = isChecked ? "square-check" : "square"
+                let checkboxSize: CGSize = CGSize(width: 12, height: 12)
+
+                // 创建图片附件
+                let attachment = NSTextAttachment()
+                #if os(iOS)
+                    attachment.image = UIImage(named: checkboxImageName)
+                #elseif os(macOS)
+                    attachment.image = NSImage(named: checkboxImageName)
+                #endif
+                attachment.bounds = CGRect(origin: CGPoint(x: 0, y: -2), size: checkboxSize)
+
+                // A. 创建带有图片的属性字符串
+                let attachmentString = NSAttributedString(attachment: attachment)
+
+                // B. 创建完整的复选框字符串
+                let checkboxAttributedString = NSMutableAttributedString(string: offset)
+                checkboxAttributedString.append(attachmentString)
+                checkboxAttributedString.append(NSAttributedString(string: "  "))
 
                 // 替换列表标记
-                attributedString.replaceCharacters(in: range, with: checkboxString)
+                attributedString.replaceCharacters(in: range, with: checkboxAttributedString)
 
                 // 更新属性
-                let updatedRange = NSRange(location: range.location, length: checkboxString.utf16.count)
+                let updatedRange = NSRange(location: range.location, length: checkboxAttributedString.length)
                 attributedString.addAttributes([.paragraphStyle: defaultParagraphStyle()], range: updatedRange)
 
                 // 移除复选框标记部分
-                let checkboxMarkRange = NSRange(location: range.location + checkboxString.utf16.count, length: checkboxMarkLength)
+                let checkboxMarkRange = NSRange(location: range.location + checkboxAttributedString.length, length: checkboxMarkLength)
                 attributedString.replaceCharacters(in: checkboxMarkRange, with: "")
 
                 return
             }
         }
-        
+
         let levelIndicatorList = [1: "\(indicator)  ", 2: "\(indicator)  ", 3: "◦  ", 4: "◦  ", 5: "▪︎  ", 6: "▪︎  "]
         let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
         guard let indicatorIcon = levelIndicatorList[level],
