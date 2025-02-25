@@ -40,15 +40,15 @@ open class MarkdownList: MarkdownLevelElement {
             let startIndex = originalString.index(originalString.startIndex, offsetBy: rangeEnd)
             let possibleCheckboxEndIndex = originalString.index(startIndex, offsetBy: min(4, originalString.count - rangeEnd))
             let possibleCheckbox = String(originalString[startIndex ..< possibleCheckboxEndIndex])
-            print("[MarkdownKit] => 当前可能的字符串：|\(possibleCheckbox)|")
+            print("[MarkdownKit] => 当前可能的字符串：|\(possibleCheckbox)|原始字符串：\(originalString)")
             var isCheckbox = false
             var isChecked = false
 
             // 检测复选框格式
-            if possibleCheckbox.hasPrefix(" [ ]") {
+            if possibleCheckbox.hasPrefix("[ ]") {
                 isCheckbox = true
                 isChecked = false
-            } else if possibleCheckbox.hasPrefix(" [x]") || possibleCheckbox.hasPrefix(" [X]") {
+            } else if possibleCheckbox.hasPrefix("[x]") || possibleCheckbox.hasPrefix("[X]") {
                 isCheckbox = true
                 isChecked = true
             }
