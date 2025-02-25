@@ -31,44 +31,47 @@ open class MarkdownList: MarkdownLevelElement {
     }
 
     open func formatText(_ attributedString: NSMutableAttributedString, range: NSRange, level: Int) {
-        // 检查是否为复选框格式
         let originalString = attributedString.string
         let rangeEnd = range.location + range.length
 
-        // 检查列表标记后是否有 [ ] 或 [x] 模式
-        if rangeEnd + 4 <= originalString.count {
+        // 确保有足够的字符来检查复选框格式
+        if rangeEnd + 5 <= originalString.count {
             let startIndex = originalString.index(originalString.startIndex, offsetBy: rangeEnd)
-            let possibleCheckboxEndIndex = originalString.index(startIndex, offsetBy: min(4, originalString.count - rangeEnd))
-            let possibleCheckbox = String(originalString[startIndex ..< possibleCheckboxEndIndex]).trimmingCharacters(in: .whitespaces)
+            let checkboxLength = 5 // " [ ]" 或 " [x]" 的长度
+            let endIndex = originalString.index(startIndex, offsetBy: min(checkboxLength, originalString.count - rangeEnd))
+            let possibleCheckbox = String(originalString[startIndex ..< endIndex])
+
             var isCheckbox = false
             var isChecked = false
 
-            // 检测复选框格式
-            if possibleCheckbox.hasPrefix("[ ]") {
+            // 检查正确的复选框格式（注意空格）
+            if possibleCheckbox.hasPrefix(" [ ]") {
                 isCheckbox = true
                 isChecked = false
-            } else if possibleCheckbox.hasPrefix("[x]") || possibleCheckbox.hasPrefix("[X]") {
+            } else if possibleCheckbox.hasPrefix(" [x]") || possibleCheckbox.hasPrefix(" [X]") {
                 isCheckbox = true
                 isChecked = true
             }
 
             if isCheckbox {
-                // 处理复选框
+                // 处理复选框：获取缩进偏移量
                 let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
-                // 创建复选框图片
-                let checkboxImage = isChecked ? "✅" : "☑️" // 这里可以替换为实际图片
+                // 创建复选框图标字符串
+                let checkboxImage = isChecked ? "✅" : "☐"
                 let checkboxString = "\(offset)\(checkboxImage)  "
 
                 // 替换列表标记
                 attributedString.replaceCharacters(in: range, with: checkboxString)
+
+                // 更新属性
                 let updatedRange = NSRange(location: range.location, length: checkboxString.utf16.count)
                 attributedString.addAttributes([.paragraphStyle: defaultParagraphStyle()], range: updatedRange)
 
-                // 移除 [ ] 或 [x] 部分（包括前面的空格）
-                let checkboxRange = NSRange(location: rangeEnd, length: 4)
-                attributedString.replaceCharacters(in: checkboxRange, with: "")
+                // 移除复选框标记部分
+                let checkboxMarkRange = NSRange(location: range.location + checkboxString.utf16.count, length: 4)
+                attributedString.replaceCharacters(in: checkboxMarkRange, with: "")
 
                 return
             }
