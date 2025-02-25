@@ -62,14 +62,12 @@ open class MarkdownList: MarkdownLevelElement {
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
-                let checkboxImageName = isChecked ? "square-check" : "square"
+                let checkboxImageName = isChecked ? "checkmark.square" : "square"
                 let checkboxSize: CGSize = CGSize(width: 12, height: 12)
-                let imagePath = Bundle.main.path(forResource: checkboxImageName, ofType: "png") ?? ""
-                print("[MarkdownKit] => 图片地址：\(imagePath)")
                 // 创建图片附件
                 let attachment = NSTextAttachment()
                 #if os(iOS)
-                attachment.image = UIImage(contentsOfFile: imagePath)
+                attachment.image = UIImage(systemName: checkboxImageName)
                 #elseif os(macOS)
                     attachment.image = NSImage(named: checkboxImageName)
                 #endif
