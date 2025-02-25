@@ -65,11 +65,11 @@ open class MarkdownList: MarkdownLevelElement {
                 // 创建复选框图标字符串
                 let checkboxImageName = isChecked ? "square-check" : "square"
                 let checkboxSize: CGSize = CGSize(width: 12, height: 12)
-
+                let bundle = Bundle(for: MarkdownList.self)
                 // 创建图片附件
                 let attachment = NSTextAttachment()
                 #if os(iOS)
-                    attachment.image = UIImage(named: checkboxImageName)
+                attachment.image = UIImage(named: checkboxImageName, in: bundle, compatibleWith: nil)
                 #elseif os(macOS)
                     attachment.image = NSImage(named: checkboxImageName)
                 #endif
