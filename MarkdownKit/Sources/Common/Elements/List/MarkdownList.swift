@@ -58,7 +58,7 @@ open class MarkdownList: MarkdownLevelElement {
 
             if isCheckbox {
                 // 处理复选框：获取缩进偏移量
-                let levelIndicatorOffsetList = [1: "", 2: "", 3: " ", 4: " ", 5: "   ", 6: "   "]
+                let levelIndicatorOffsetList = [1: "", 2: "", 3: "  ", 4: "  ", 5: "    ", 6: "    "]
                 guard let offset = levelIndicatorOffsetList[level] else { return }
 
                 // 创建复选框图标字符串
@@ -79,7 +79,7 @@ open class MarkdownList: MarkdownLevelElement {
                 // B. 创建完整的复选框字符串
                 let checkboxAttributedString = NSMutableAttributedString(string: offset)
                 checkboxAttributedString.append(attachmentString)
-                checkboxAttributedString.append(NSAttributedString(string: "  "))
+                checkboxAttributedString.append(NSAttributedString(string: " "))
 
                 // 替换列表标记
                 attributedString.replaceCharacters(in: range, with: checkboxAttributedString)
@@ -110,7 +110,7 @@ open class MarkdownList: MarkdownLevelElement {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.firstLineHeadIndent = 0
         paragraphStyle.headIndent = 12
-        paragraphStyle.paragraphSpacing = 8
+        paragraphStyle.paragraphSpacing = 4
         return paragraphStyle
     }
 }
