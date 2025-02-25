@@ -40,7 +40,6 @@ open class MarkdownList: MarkdownLevelElement {
             let checkboxLength = 4 // "[ ]" 或 "[x]" 的长度（注意：没有前导空格）
             let endIndex = originalString.index(startIndex, offsetBy: min(checkboxLength, originalString.count - rangeEnd))
             let possibleCheckbox = String(originalString[startIndex ..< endIndex])
-            print("[MarkdownKit] => 修正后检查的字符串：|\(possibleCheckbox)|")
 
             var isCheckbox = false
             var isChecked = false
@@ -65,11 +64,12 @@ open class MarkdownList: MarkdownLevelElement {
                 // 创建复选框图标字符串
                 let checkboxImageName = isChecked ? "square-check" : "square"
                 let checkboxSize: CGSize = CGSize(width: 12, height: 12)
-                let bundle = Bundle(for: MarkdownList.self)
+                let imagePath = Bundle.main.path(forResource: checkboxImageName, ofType: "png") ?? ""
+                print("[MarkdownKit] => 图片地址：\(imagePath)")
                 // 创建图片附件
                 let attachment = NSTextAttachment()
                 #if os(iOS)
-                attachment.image = UIImage(named: checkboxImageName, in: bundle, compatibleWith: nil)
+                attachment.image = UIImage(contentsOfFile: imagePath)
                 #elseif os(macOS)
                     attachment.image = NSImage(named: checkboxImageName)
                 #endif
