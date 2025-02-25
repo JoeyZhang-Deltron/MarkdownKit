@@ -40,7 +40,7 @@ open class MarkdownList: MarkdownLevelElement {
             let checkboxLength = 5 // " [ ]" 或 " [x]" 的长度
             let endIndex = originalString.index(startIndex, offsetBy: min(checkboxLength, originalString.count - rangeEnd))
             let possibleCheckbox = String(originalString[startIndex ..< endIndex])
-
+            print("[MarkdownKit] => 当前的可能的字符串：|\(possibleCheckbox)|")
             var isCheckbox = false
             var isChecked = false
 
